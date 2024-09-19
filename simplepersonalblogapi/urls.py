@@ -20,4 +20,7 @@ urlpatterns = [
 
     # Account app: user authentication
     path("api/account/", include('account.urls')),
+
+    # Account app: blog management
+    path("api/blog/", include('blog.urls')),
 ]
