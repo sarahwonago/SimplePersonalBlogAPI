@@ -44,16 +44,18 @@ This Simple Personal Blog backend API is built using Django and Django Rest Fram
 
 
 ## API Endpoints
-| Method | Endpoint | Description |
-| ----------- | ----------- || ----------- |
-| GET	| /api/articles/	| Retrieve a list of articles |
-| GET	| /api/articles/<id>/	| Retrieve a specific article by ID |
-| POST	| /api/articles/	| Create a new article (authenticated users) |
-| PUT	| /api/articles/<id>/	| Update an article by ID (authenticated) |
-| DELETE | /api/articles/<id>/	| Delete an article by ID (authenticated) |
-| GET   | /api/schema/ | Provides access to the OpenAPI schema |
-| GET   | /api/docs/swagger/ | Serves the Swagger UI interface |
-| GET   | /api/docs/redoc | Serves the Redoc documentation interface |
+
+| Method | Endpoint                | Description                                       |
+|--------|-------------------------|---------------------------------------------------|
+| GET    | `/api/articles/`         | Retrieve a list of articles                       |
+| GET    | `/api/articles/<id>/`    | Retrieve a specific article by ID                 |
+| POST   | `/api/articles/`         | Create a new article (authenticated users)        |
+| PUT    | `/api/articles/<id>/`    | Update an article by ID (authenticated)           |
+| DELETE | `/api/articles/<id>/`    | Delete an article by ID (authenticated)           |
+| GET    | `/api/schema/`           | Provides access to the OpenAPI schema             |
+| GET    | `/api/docs/swagger/`     | Serves the Swagger UI interface                   |
+| GET    | `/api/docs/redoc/`       | Serves the Redoc documentation interface          |
+
 
 
 ## Query Parameters
@@ -67,6 +69,7 @@ Example: /api/articles/?tags=django
 - API Framework: Django Rest Framework (3.x)
 - Database: SQLite (default, but can be replaced with PostgreSQL or MySQL)
 - Authentication: (DRF’s simpleJWT  Token Authentication )
+- Documentation: drf-spectacular
 - Deployment: 
 - Testing: Can be tested using Postman or cURL
 
