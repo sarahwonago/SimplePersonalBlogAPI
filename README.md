@@ -66,9 +66,9 @@ Example: /api/articles/?tags=django
 
 ## Technology Stack
 - Backend Framework: Django (5.x)
-- API Framework: Django Rest Framework (3.x)
+- API Framework: Django Rest Framework (3.x) djangorestframework
 - Database: SQLite (default, but can be replaced with PostgreSQL or MySQL)
-- Authentication: (DRF’s simpleJWT  Token Authentication )
+- Authentication: Django Rest Framework (5.x) djangorestframework-simplejwt
 - Documentation: drf-spectacular
 - Deployment: 
 - Testing: Can be tested using Postman or cURL

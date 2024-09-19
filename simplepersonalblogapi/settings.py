@@ -31,6 +31,9 @@ INSTALLED_APPS = [
     # API
     "rest_framework",
 
+    # API Authentication
+    "rest_framework_simplejwt.token_blacklist", # for token blacklisting
+
     # API documentation
     "drf_spectacular",
 
@@ -125,7 +128,30 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # REST FRAMEWORK CONFIGURATIONS
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS':"drf_spectacular.openapi.AutoSchema", 
+
+    'DEFAULT_AUTHENTICATION_CLASSES':(
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+
+    'DEFAULT_PERMISSION_CLASSES':(
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+
 }
+
+# JWT Configuration
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=24),  # Token validity
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=90),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,  # Blacklist tokens after they're refreshed
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
 
 # Spectacular settings
 SPECTACULAR_SETTINGS = {
