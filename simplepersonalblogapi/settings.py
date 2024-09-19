@@ -32,19 +32,25 @@ INSTALLED_APPS = [
     "rest_framework",
 
     # API Authentication
+    "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist", # for token blacklisting
 
     # API documentation
     "drf_spectacular",
+
+    # CORS
+    "corsheaders",
 
     # CUSTOM APPS
     "blog.apps.BlogConfig",
     "account.apps.AccountConfig",
 ]
 
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -130,6 +136,7 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS':"drf_spectacular.openapi.AutoSchema", 
 
     'DEFAULT_AUTHENTICATION_CLASSES':(
+        'django.contrib.auth.backends.ModelBackend', 
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 
@@ -177,4 +184,6 @@ SPECTACULAR_SETTINGS = {
     },
 }
 
+CORS_ALLOWED_ORIGINS = [
 
+]

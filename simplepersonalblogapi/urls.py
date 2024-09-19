@@ -17,4 +17,7 @@ urlpatterns = [
 
     # Redoc UI
     path('api/docs/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+
+    # Account app: user authentication
+    path("api/account/", include('account.urls')),
 ]

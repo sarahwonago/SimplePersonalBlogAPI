@@ -1,9 +1,18 @@
-# Simple Personal Blog API
+# Simple Personal Blog API with JWT Authentication
 This Simple Personal Blog backend API is built using Django and Django Rest Framework (DRF) that powers a personal blogging platform. The API allows users to create, update, delete, and retrieve blog articles. Users can also filter articles based on tags or publication status. This API can be consumed by frontend applications like React, mobile apps, or other clients that need a blog feature.
 
+
 **Features**
+- **User Registration**: Users can register with their email, username, and password.
+- **User Login**: Authenticated users can log in and receive access and refresh tokens.
+- **JWT-based Authentication**: Protects routes using JWT tokens (access and refresh tokens).
+- **Article Management**: Users can create, retrieve, update, and delete articles.
+- **Token Blacklisting**: (Optional) Allows for revoking JWT tokens.
+- **Swagger Documentation**: API documentation available via Swagger UI.
+
+
 ## What the Project Does:
-1. Authentication: The project includes user authentication using JWT authentication.
+1. Authentication- Allows users to register and authenticate via JWT tokens.Supports token refresh and (optionally) token blacklisting.
 2. List Articles: Retrieve a list of all published/unpublished articles.
 3. Filter Articles: Apply filters by tags and publication status.
 4. Create New Articles: Authenticated users can create and publish new articles.
@@ -13,6 +22,8 @@ This Simple Personal Blog backend API is built using Django and Django Rest Fram
 
 ## What the Project Does Not Do:
 1. No Frontend: This project is a backend API only. It does not include a frontend for interacting with the articles (e.g., no HTML views, no JavaScript).
+2. This API does not handle OAuth2 or third-party login (e.g., Google, Facebook).
+3. It does not encrypt the JWT token payload.
 
 ---
 
@@ -37,24 +48,31 @@ This Simple Personal Blog backend API is built using Django and Django Rest Fram
 4. Apply database migrations
 `python manage.py migrate`
 
-5. Run the development server 
+5. Create a superuser
+`python manage.py createsuperuser`
+
+6. Run the development server 
 `python manage.py runserver`
 
-6. The API will be accessible at http://127.0.0.1:8000/api/
+7. The API will be accessible at http://127.0.0.1:8000/api/
 
 
 ## API Endpoints
 
-| Method | Endpoint                | Description                                       |
-|--------|-------------------------|---------------------------------------------------|
-| GET    | `/api/articles/`         | Retrieve a list of articles                       |
-| GET    | `/api/articles/<id>/`    | Retrieve a specific article by ID                 |
-| POST   | `/api/articles/`         | Create a new article (authenticated users)        |
-| PUT    | `/api/articles/<id>/`    | Update an article by ID (authenticated)           |
-| DELETE | `/api/articles/<id>/`    | Delete an article by ID (authenticated)           |
-| GET    | `/api/schema/`           | Provides access to the OpenAPI schema             |
-| GET    | `/api/docs/swagger/`     | Serves the Swagger UI interface                   |
-| GET    | `/api/docs/redoc/`       | Serves the Redoc documentation interface          |
+| Method | Endpoint                | Description                                          |
+|--------|-------------------------|------------------------------------------------------|
+| POST   | `/api/account/register/`           | Register a new user                               |
+| POST   | `/api/account/login/`              | Login and get JWT tokens                          |
+| POST   | `/api/account/token/refresh/`      | Refresh JWT access token                          |
+| POST   | `/api/account/token/blacklist/`    | (Optional) Blacklist a JWT token                  |
+| GET    | `/api/articles/`           | Retrieve a list of articles                       |
+| GET    | `/api/articles/<id>/`      | Retrieve a specific article by ID                 |
+| POST   | `/api/articles/`           | Create a new article (authenticated users)        |
+| PUT    | `/api/articles/<id>/`      | Update an article by ID (authenticated)           |
+| DELETE | `/api/articles/<id>/`      | Delete an article by ID (authenticated)           |
+| GET    | `/api/schema/`             | Provides access to the OpenAPI schema             |
+| GET    | `/api/docs/swagger/`       | Serves the Swagger UI interface                   |
+| GET    | `/api/docs/redoc/`         | Serves the Redoc documentation interface          |
 
 
 
@@ -65,15 +83,16 @@ Example: /api/articles/?published=true
 Example: /api/articles/?tags=django
 
 ## Technology Stack
-- Backend Framework: Django (5.x)
-- API Framework: Django Rest Framework (3.x) djangorestframework
-- Database: SQLite (default, but can be replaced with PostgreSQL or MySQL)
-- Authentication: Django Rest Framework (5.x) djangorestframework-simplejwt
-- Documentation: drf-spectacular
-- Deployment: 
-- Testing: Can be tested using Postman or cURL
+- **Backend**: Django, Django Rest Framework
+- **Authentication**: JWT Authentication (via `djangorestframework-simplejwt`)
+- **Documentation**: DRF Spectacular for OpenAPI (Swagger & Redoc)
+- **Database**: SQLite (can be changed to PostgreSQL/MySQL for production)
+- **Security Enhancements**: HTTPS, CORS, Token Blacklisting, Password Policies
+- **Deployment**: 
+- **Testing**: Can be tested using Postman or cURL
 
-## How to Use
+
+## Testing with Postman
 1. Create an Article
 To create a new article, send a POST request to /api/articles/ with the following JSON payload:
 ```
@@ -104,6 +123,59 @@ To update an existing article, send a PUT request to /api/articles/<id>/:
 
 3. Delete an Article
 To delete an article, send a DELETE request to /api/articles/<id>/.
+
+
+
+4. **Register a User**: Send a POST request to /api/account/register/.
+```
+
+{
+    "username": "testuser",
+    "email": "testuser@example.com",
+    "password": "TestPassword123!"
+}
+
+
+
+```
+
+Response:
+```
+
+{
+    "message": "User created successfully."
+}
+
+```
+
+5. **Login**: Send a POST request to /api/account/login/ to get access and refresh tokens.
+```
+
+{
+    "username": "testuser",
+    "password": "TestPassword123!"
+}
+
+
+
+```
+
+Response:
+```
+
+{
+    "refresh": "your-refresh-token",
+    "access": "your-access-token"
+}
+
+```
+
+6. **Use JWT for Protected Routes**: Include the access token in the Authorization header for authenticated requests (Bearer <token>).
+```
+
+Authorization: Bearer <your-access-token>
+
+```
 
 ## Future Enhancements
 - Add User Roles: Yet to Implement different user roles like Admin, Author, and Reader with different permissions.
