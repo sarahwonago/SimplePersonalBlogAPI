@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
@@ -11,6 +12,7 @@ from .permissions import IsOwner
 class ArticleListAPIView(APIView):
     """
     Handles retrieving a list of all articles that are featured.
+    Supports query parameters 'tags' and published_date.
 
     Users must be authenticated.
 
@@ -25,7 +27,22 @@ class ArticleListAPIView(APIView):
         """
         Retrieves all the articles that are featured.
         """
+        tags = request.query_params.get('tags', None)
+        published_date = request.query_params.get('published_date', None)
+
+        # Start with all featured articles
         articles = Article.objects.filter(featured=True)
+
+        # Filter by tags if provided
+        if tags:
+            articles = articles.filter(tags__icontains=tags)
+
+        # Filter by published_date if provided
+        if published_date:
+            articles = articles.filter(published_date__date=published_date)
+
+        if tags and published_date:
+            articles = articles.filter(Q(published_date__date=published_date)|Q(tags__icontains=tags))
 
         if not articles.exists():
             response = {
