@@ -75,6 +75,9 @@ This Simple Personal Blog backend API is built using Django and Django Rest Fram
 | POST   | `/api/blog/articles/`           | Create a new article (authenticated users)        |
 | PUT    | `/api/blog/article/<id>/`      | Update an article by ID (authenticated)           |
 | DELETE | `/api/blog/article/<id>/`      | Delete an article by ID (authenticated)           |
+| POST     | `/api/blog/articles/<id>/comment/`     | Add a comment to an article |
+| POST     | `/api/blog/articles/<id>/like/`        | Like an article           |
+| POST     | `/api/blog/articles/<id>/share/`       | Share an article |
 | GET    | `/api/schema/`             | Provides access to the OpenAPI schema             |
 | GET    | `/api/docs/swagger/`       | Serves the Swagger UI interface                   |
 | GET    | `/api/docs/redoc/`         | Serves the Redoc documentation interface          |
@@ -105,7 +108,8 @@ To create a new article, send a POST request to /api/blog/articles/ with the fol
 {
     "title": "First Article",
     "tags": "#new",
-    "body": "This is my First article"
+    "body": "This is my First article",
+    "featured": true
 }
 
 ```
@@ -121,7 +125,11 @@ Response:
   },
   "title": "First Article",
   "tags": "#new",
-  "body": "This is my First article"
+  "body": "This is my First article",
+  "featured": true,
+  "comments_count": 0,
+  "likes_count": 0,
+  "shares_count": 0
 }
 
 ```
@@ -141,7 +149,11 @@ Response:
     },
     "title": "Second Article",
     "tags": "#new",
-    "body": "This is my second article"
+    "body": "This is my second article",
+    "featured": true,
+    "comments_count": 1,
+    "likes_count": 0,
+    "shares_count": 0
   },
   {
     "id": "156f4137-f9c5-4d45-8e4f-fca7a957dd61",
@@ -151,7 +163,11 @@ Response:
     },
     "title": "First Article",
     "tags": "#new",
-    "body": "This is my first article"
+    "body": "This is my first article",
+    "featured": true,
+    "comments_count": 2,
+    "likes_count": 1,
+    "shares_count": 1
   }
 ]
 
@@ -166,7 +182,8 @@ To update an existing article, send a PUT request to /api/blog/article/<id>/ wit
    
     "title": "First Article Updated",
     "tags": "#new",
-    "body": "This is my First article"
+    "body": "This is my First article",
+    "featured": false
 }
 
 
@@ -182,7 +199,11 @@ Response:
   },
   "title": "First Article Updated",
   "tags": "#new",
-  "body": "This is my First article"
+  "body": "This is my First article",
+  "featured": false,
+  "comments_count": 0,
+  "likes_count": 0,
+  "shares_count": 0
 }
 
 
@@ -200,7 +221,11 @@ Response:
   },
   "title": "First Article Updated",
   "tags": "#new",
-  "body": "This is my First article"
+  "body": "This is my First article",
+  "featured": true,
+  "comments_count": 10,
+  "likes_count": 10,
+  "shares_count": 10
 }
 
 ```
@@ -270,9 +295,47 @@ Authorization: Bearer <your-access-token>
 
 ```
 
+9. Comment on an Article
+To comment an existing article, send a POST request to /api/blog/articles/<id>/comment/ with the following JSON payload:
+
+```
+{
+  "comment":"Interesting article."
+}
+```
+
+Response:
+```
+{
+  "id": "459a52bc-c652-470f-984b-d900de2dba60",
+  "user": "zaza",
+  "comment": "Interesting article.",
+  "created_date": "2024-09-20T12:00:11.938511Z"
+}
+```
+
+10. Like  an Article
+To like an existing article, send a POST request to /api/blog/article/<id>/like/
+Response:
+
+```
+{
+  "message": "Article liked."
+}
+```
+
+11. Share  an Article
+To share an existing article, send a POST request to /api/blog/article/<id>/share/
+Response:
+
+```
+{
+  "message": "Article shared successfully."
+}
+```
+
 ## Future Enhancements
 - Add User Roles: Yet to Implement different user roles like Admin, Author, and Reader with different permissions.
-- Commenting System: Yet to Add functionality for readers to comment on articles.
 - Image Uploads: Yet to Allow users to attach images to articles.
 - Frontend: Yet to Build a user-friendly frontend using React, Vue, or any other framework.
 

@@ -107,3 +107,4 @@ class Share(models.Model):
 
     def __str__(self):
         return f"{self.user} shared {self.article}"
+

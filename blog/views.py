@@ -1,11 +1,11 @@
-
+from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Article
-from .serializers import ArticleSerializer
+from .models import Article, Comment, Like, Share
+from .serializers import ArticleSerializer, CommentSerializer, LikeSerializer, ShareSerializer
 from .permissions import IsOwner
 
 class ArticleListAPIView(APIView):
@@ -148,3 +148,104 @@ class ArticleDetailAPIView(APIView):
                 "message": "Article deleted successfully."
             }
         return Response(response, status=status.HTTP_204_NO_CONTENT)
+    
+
+
+class CommentCreateView(APIView):
+    """
+    Handles adding a comment to an article.
+    - POST: Creates a new comment.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, pk):
+        """
+        Util function to fetch an article.
+        Returns an article
+        """
+        article = get_object_or_404(Article, id=pk)
+        
+        return article
+
+    def post(self, request, pk):
+        """
+        Creates a new comment for an article.
+        """
+        article = self.get_object(pk=pk)
+
+        serializer = CommentSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save(user=request.user, article=article)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LikeArticleView(APIView):
+    """
+    Handles liking an article.
+    - POST: Likes an article.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, pk):
+        """
+        Util function to fetch an article.
+        Returns an article
+        """
+        article = get_object_or_404(Article, id=pk)
+        
+        return article
+
+    def post(self, request, pk):
+        """
+        Handles POST request for liking an article.
+        """
+        article = self.get_object(pk=pk)
+
+        # checks if the user has already liked the article
+        if Like.objects.filter(article=article, user=request.user).exists():
+            response = {
+                "message": "Already liked this article."
+            }
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        
+        # creates a like object
+        Like.objects.create(article=article, user=request.user)
+
+        response = {
+                "message": "Article liked."
+            }
+
+        return Response(response, status=status.HTTP_201_CREATED)
+
+
+class ShareArticleView(APIView):
+    """
+    Handles sharing an article.
+    - POST: Shares an article.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, pk):
+        """
+        Util function to fetch an article.
+        Returns an article
+        """
+        article = get_object_or_404(Article, id=pk)
+        
+        return article
+
+    def post(self, request, pk):
+        """
+        Handles POST request for sharing an article.
+        """
+
+        article = self.get_object(pk=pk)
+        
+        share = Share.objects.create(article=article, user=request.user)
+        response = {
+                "message": "Article shared successfully."
+            }
+        return Response(response, status=status.HTTP_201_CREATED)
