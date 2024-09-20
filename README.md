@@ -19,6 +19,9 @@ This Simple Personal Blog backend API is built using Django and Django Rest Fram
 5. View a Single Article: Retrieve details of a specific article by its ID.
 6. Update Articles: Authenticated users can update the content or metadata of existing articles by specifying the article ID.
 7. Delete Articles: Authenticated users can delete an article by its ID.
+8. Comment on articles
+9. Share articles
+10. Like articles
 
 ## What the Project Does Not Do:
 1. No Frontend: This project is a backend API only. It does not include a frontend for interacting with the articles (e.g., no HTML views, no JavaScript).
