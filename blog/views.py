@@ -8,6 +8,35 @@ from .models import Article
 from .serializers import ArticleSerializer
 from .permissions import IsOwner
 
+class ArticleListAPIView(APIView):
+    """
+    Handles retrieving a list of all articles that are featured.
+
+    Users must be authenticated.
+
+    Methods:
+        get: fetches a list of all articles.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+
+    def get(self, request):
+        """
+        Retrieves all the articles that are featured.
+        """
+        articles = Article.objects.filter(featured=True)
+
+        if not articles.exists():
+            response = {
+                "message":"No featured articles."
+            }
+
+            return Response(response, status=status.HTTP_200_OK)
+        
+        serializer = ArticleSerializer(articles, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class ArticleListCreateAPIView(APIView):
     """

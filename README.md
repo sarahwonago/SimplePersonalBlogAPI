@@ -69,6 +69,7 @@ This Simple Personal Blog backend API is built using Django and Django Rest Fram
 | POST   | `/api/account/token/refresh/`      | Refresh JWT access token                  |
 | POST   | `/api/account/token/obtain/`      | Obtain JWT access/refresh token       |
 | POST   | `/api/account/token/blacklist/`    | (Optional) Blacklist a JWT token          |
+| GET    | `/api/blog/featured-articles/`           | Retrieve a list of all featured articles|
 | GET    | `/api/blog/articles/`           | Retrieve a list of articles                       |
 | GET    | `/api/blog/article/<id>/`      | Retrieve a specific article by ID                 |
 | POST   | `/api/blog/articles/`           | Create a new article (authenticated users)        |
