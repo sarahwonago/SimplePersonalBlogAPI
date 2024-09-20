@@ -53,4 +53,69 @@ class ArticleListCreateAPIView(APIView):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class ArticleDetailAPIView(APIView):
+    """
+    Handles retrieving, updating and deleting of a single article.
 
+    Users must be authenticated.
+
+    Methods:
+        get: fetches an article by its iD.
+        put: updates an existing article.
+        delete: deletes an article.
+    """
+
+    permission_classes = [IsAuthenticated, IsOwner]
+
+    def get_object(self, pk):
+        """
+        Util function to fetch an article.
+        Returns an article
+        """
+        try:
+            article = Article.objects.get(pk=pk)
+        except Article.DoesNotExist:
+            response = {
+                "message": "Article not found."
+            }
+            return Response(response, status=status.HTTP_404_NOT_FOUND)
+        
+        return article
+
+    def get(self, request, pk):
+        """
+        Retrieves an article by its ID.
+        """
+        article = self.get_object(pk=pk)
+
+        serializer = ArticleSerializer(article)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def put(self, request, pk):
+        """
+        Updates an existing article.
+        Returns an updated article or error.
+        """
+        article = self.get_object(pk=pk)
+
+        serializer = ArticleSerializer(data=request.data, instance=article)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, pk):
+        """
+        Deletes an existing article.
+        """
+        article = self.get_object(pk=pk)
+
+        article.delete()
+
+        response = {
+                "message": "Article deleted successfully."
+            }
+        return Response(response, status=status.HTTP_204_NO_CONTENT)

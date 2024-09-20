@@ -70,10 +70,10 @@ This Simple Personal Blog backend API is built using Django and Django Rest Fram
 | POST   | `/api/account/token/obtain/`      | Obtain JWT access/refresh token       |
 | POST   | `/api/account/token/blacklist/`    | (Optional) Blacklist a JWT token          |
 | GET    | `/api/blog/articles/`           | Retrieve a list of articles                       |
-| GET    | `/api/blog/articles/<id>/`      | Retrieve a specific article by ID                 |
+| GET    | `/api/blog/article/<id>/`      | Retrieve a specific article by ID                 |
 | POST   | `/api/blog/articles/`           | Create a new article (authenticated users)        |
-| PUT    | `/api/blog/articles/<id>/`      | Update an article by ID (authenticated)           |
-| DELETE | `/api/blog/articles/<id>/`      | Delete an article by ID (authenticated)           |
+| PUT    | `/api/blog/article/<id>/`      | Update an article by ID (authenticated)           |
+| DELETE | `/api/blog/article/<id>/`      | Delete an article by ID (authenticated)           |
 | GET    | `/api/schema/`             | Provides access to the OpenAPI schema             |
 | GET    | `/api/docs/swagger/`       | Serves the Swagger UI interface                   |
 | GET    | `/api/docs/redoc/`         | Serves the Redoc documentation interface          |
@@ -157,26 +157,67 @@ Response:
 ```
 
 3. Update an Article
-To update an existing article, send a PUT request to /api/articles/<id>/:
+To update an existing article, send a PUT request to /api/blog/article/<id>/ with the following JSON payload:
 
 ```
 
 {
-    "title": "Updated Title",
-    "content": "This is the updated content.",
-    "published": false,
-    "tags": "drf,rest"
+   
+    "title": "First Article Updated",
+    "tags": "#new",
+    "body": "This is my First article"
 }
 
 
 ```
+Response:
+```
 
-3. Delete an Article
-To delete an article, send a DELETE request to /api/articles/<id>/.
+{
+  "id": "156f4137-f9c5-4d45-8e4f-fca7a957dd61",
+  "user": {
+    "username": "zaza",
+    "email": "zaza@gmail.com"
+  },
+  "title": "First Article Updated",
+  "tags": "#new",
+  "body": "This is my First article"
+}
 
 
+```
+4. Retrieve an Article
+To retrieve an existing article by its id, send a GET request to /api/blog/article/<id>/:
+Response:
+```
 
-4. **Register a User**: Send a POST request to /api/account/register/.
+{
+  "id": "156f4137-f9c5-4d45-8e4f-fca7a957dd61",
+  "user": {
+    "username": "zaza",
+    "email": "zaza@gmail.com"
+  },
+  "title": "First Article Updated",
+  "tags": "#new",
+  "body": "This is my First article"
+}
+
+```
+
+5. Delete an Article
+To delete an article, send a DELETE request to /api/blog/article/<id>/.
+
+Response:
+```
+{
+  "message": "Article deleted successfully."
+}
+
+```
+
+
+6. **Register a User**: Send a POST request to /api/account/register/ with the following JSON payload:
+
 ```
 
 {
@@ -198,7 +239,8 @@ Response:
 
 ```
 
-5. **Login**: Send a POST request to /api/account/login/ to get access and refresh tokens.
+7. **Login**: Send a POST request to get access and refresh tokens to /api/account/login/ with the following JSON payload:
+
 ```
 
 {
@@ -220,7 +262,7 @@ Response:
 
 ```
 
-6. **Use JWT for Protected Routes**: Include the access token in the Authorization header for authenticated requests (Bearer <token>).
+8. **Use JWT for Protected Routes**: Include the access token in the Authorization header for authenticated requests (Bearer <token>).
 ```
 
 Authorization: Bearer <your-access-token>
