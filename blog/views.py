@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from drf_spectacular.utils import extend_schema
 
 from .models import Article, Comment, Like, Share
 from .serializers import ArticleSerializer, CommentSerializer, LikeSerializer, ShareSerializer
@@ -22,7 +23,9 @@ class ArticleListAPIView(APIView):
 
     permission_classes = [IsAuthenticated]
 
-
+    @extend_schema(
+            description="Retrieves a list of all featured articles."
+    )
     def get(self, request):
         """
         Retrieves all the articles that are featured.
