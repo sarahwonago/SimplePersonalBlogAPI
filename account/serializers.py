@@ -4,6 +4,19 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
+
+class UserSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the User Model.
+    """
+
+    class Meta:
+        model = User
+        fields = [
+            "username",
+            "email" 
+        ]
+        
 class RegisterUserSerializer(serializers.ModelSerializer):
     """
     Serializer for handling user registration.

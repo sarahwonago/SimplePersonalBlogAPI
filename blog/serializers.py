@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from .models import Article
 
+from account.serializers import UserSerializer
+
 class ArticleSerializer(serializers.ModelSerializer):
     """
     Serializer for the Article model.
@@ -17,6 +19,8 @@ class ArticleSerializer(serializers.ModelSerializer):
         updated_date (DateTimeField): timestamp when the article was updated.
 
     """
+
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = Article

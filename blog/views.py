@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import Article
 from .serializers import ArticleSerializer
-from .permissions import IsOwnerAndAuthenticated
+from .permissions import IsOwner
 
 
 class ArticleListCreateAPIView(APIView):
@@ -20,7 +20,7 @@ class ArticleListCreateAPIView(APIView):
         post: creates a new article.
     """
 
-    permission_classes = [IsAuthenticated, IsOwnerAndAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwner]
 
 
     def get(self, request):
